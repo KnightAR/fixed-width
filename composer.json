@@ -1,0 +1,54 @@
+{
+    "name": "teamzac/fixed-width",
+    "description": "A package to help simplify parsing a fixed-width delimited file",
+    "keywords": [
+        "teamzac",
+        "fixed-width"
+    ],
+    "homepage": "https://github.com/teamzac/fixed-width",
+    "license": "MIT",
+    "type": "library",
+    "authors": [
+        {
+            "name": "Chad Janicek",
+            "email": "chad@zactax.com",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^7.2",
+        "illuminate/support": "^6.0|^7.0"
+    },
+    "require-dev": {
+        "orchestra/testbench": "^4.0",
+        "phpunit/phpunit": "^8.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "TeamZac\\FixedWidth\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "TeamZac\\FixedWidth\\Tests\\": "tests"
+        }
+    },
+    "scripts": {
+        "test": "vendor/bin/phpunit",
+        "test-coverage": "vendor/bin/phpunit --coverage-html coverage"
+
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Teamzac\\FixedWidth\\FixedWidthServiceProvider"
+            ],
+            "aliases": {
+                "FixedWidth": "Teamzac\\FixedWidth\\FixedWidthFacade"
+            }
+        }
+    }
+}
