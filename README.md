@@ -179,6 +179,7 @@ Field::make('favorite_colors', 20)->explode(',')
 
 ## Todo
 
+- Allow casting to date with user-specified date format
 - Allow anonymous LineDefinitions, rather than requiring a dedicated class
 - Allow a callback for the ignore() function so you could dynamically choose whether to ignore certain fields? Not sure if that will be useful.
 
