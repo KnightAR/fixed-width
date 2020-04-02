@@ -7,19 +7,19 @@ Parsing fixed with files isn't much fun. It often involves a lot of procedural c
 
 ## Features:
 
-- Value casting 
+### Value casting 
 Easily cast the raw value to a string, int, float, or bool value.
 
-- Value mapping
+### Value mapping
 Provide a key-value array that will map your source data to a more helpful destination data. For example, 'T' and 'F' can become ```true``` and ```false```, respectively. Convert coded data to the correct foreign key for some related database table. Whatever you need to do, really.
 
-- Transform callbacks
+### Transform callbacks
 If you need more fine-grained control over how the data is transformed from source, you can specify a callback function.
 
-- Filler and ignored fields
+### Filler and ignored fields
 If your source data has filler fields or fields you don't care about, you can easily account for them without muddying up your parsed results.
 
-- Nested Results
+### Nested Results
 Using dot notation, you can nest your parsed results.
 
 ## Installation
