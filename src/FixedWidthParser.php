@@ -79,8 +79,9 @@ class FixedWidthParser
         }
 
     	$file = fopen($this->filepath, 'r');
+        $lineDefinition = new $this->rowClass();
     	while ($line = fgets($file)) {
-    		$row = new $this->rowClass($line);
+    		$row = $lineDefinition->parse($line);
 
     		$callback($row);
     	}

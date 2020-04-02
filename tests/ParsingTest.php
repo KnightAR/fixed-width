@@ -29,7 +29,7 @@ class ParsingTest extends TestCase
     {
         $rowText = '  A  B  C';
 
-        $line = new SimpleLine($rowText);
+        $line = (new SimpleLine)->parse($rowText);
 
         $this->assertSame('A', $line->get('a'));
         $this->assertSame('B', $line->get('b'));
@@ -41,7 +41,7 @@ class ParsingTest extends TestCase
     {
         $rowText = '  1  23.0  1';
 
-        $line = new CastingLine($rowText);
+        $line = (new CastingLine)->parse($rowText);
 
         $this->assertSame('1', $line->get('as_string'));
         $this->assertSame(2, $line->get('as_int'));
@@ -53,11 +53,11 @@ class ParsingTest extends TestCase
     public function it_uses_a_value_map()
     {
         $rowText = 'Y';
-        $line = new ValueMappedLine($rowText);
+        $line = (new ValueMappedLine)->parse($rowText);
         $this->assertSame(true, $line->get('mapped_value'));
 
         $rowText = 'N';
-        $line = new ValueMappedLine($rowText);
+        $line = (new ValueMappedLine)->parse($rowText);
         $this->assertSame(false, $line->get('mapped_value'));
     }
 
@@ -65,7 +65,7 @@ class ParsingTest extends TestCase
     public function it_can_explode_a_value()
     {
         $rowText = 'C12,C13,C20           ';
-        $line = new ExplodedLine($rowText);
+        $line = (new ExplodedLine)->parse($rowText);
         $this->assertSame([
             'C12', 'C13', 'C20',
         ], $line->get('codes'));
@@ -75,7 +75,7 @@ class ParsingTest extends TestCase
     public function it_can_transform_a_value()
     {
         $rowText = 'lower';
-        $line = new TransformedLine($rowText);
+        $line = (new TransformedLine)->parse($rowText);
         $this->assertSame('LOWER', $line->get('upper'));
     }
     
@@ -84,7 +84,7 @@ class ParsingTest extends TestCase
     {
         $rowText = '     12345     ';
 
-        $line = new FillerLine($rowText);
+        $line = (new FillerLine)->parse($rowText);
         $this->assertCount(1, $line->toArray());
     }
     
@@ -93,7 +93,7 @@ class ParsingTest extends TestCase
     {
         $rowText = 'IGNOREKEEP';
 
-        $line = new IgnoreLine($rowText);
+        $line = (new IgnoreLine)->parse($rowText);
         $this->assertCount(1, $line->toArray());
         $this->assertSame([
             'kept' => 'KEEP',

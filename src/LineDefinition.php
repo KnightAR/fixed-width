@@ -6,39 +6,6 @@ use Illuminate\Support\Arr;
 
 class LineDefinition
 {
-	/** @var array */
-	protected $attributes = [];
-
-	public function __construct(string $rowText)
-	{
-		$this->parseRowText($rowText);
-	}
-
-	/**
-	 * Return the attributes
-	 */
-	public function toArray()
-	{
-		return $this->attributes;
-	}
-
-	/**
-	 * Provide a convenient way to access the attributes
-	 */
-	public function __get($key)
-	{
-		return $this->get($key);
-	}
-
-	/**
-	 * If you need to access a nested property, you can use
-	 * this method instead of the magic method above
-	 */
-	public function get($key)
-	{
-		return Arr::get($this->attributes, $key);
-	}
-
 	/** 
 	 * Return an array of Field objects that defines how the string should be parsed
 	 *
@@ -54,13 +21,14 @@ class LineDefinition
 	 *
 	 * @param 	string $rowText
 	 */
-	protected function parseRowText($rowText)
+	public function parse($rowText)
 	{
 		$columnPointer = 0;
+		$attributes = [];
 		foreach ($this->fieldDefinitions() as $field) {
 			if ($field->shouldBeIncluded()) {
 				Arr::set(
-					$this->attributes, 
+					$attributes, 
 					$field->getKey(), 
 					$field->getCastedValue(substr($rowText, $columnPointer, $field->getLength()))
 				);
@@ -68,5 +36,7 @@ class LineDefinition
 
 			$columnPointer += $field->getLength();
 		}
+
+		return new ParsedLine($attributes);
 	}
 }

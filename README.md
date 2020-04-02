@@ -1,11 +1,28 @@
-# Very short description of the package
+# A lightweight package to make parsing fixed-width text files a bit easier
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/teamzac/fixed-width.svg?style=flat-square)](https://packagist.org/packages/teamzac/fixed-width)
 [![Build Status](https://img.shields.io/travis/teamzac/fixed-width/master.svg?style=flat-square)](https://travis-ci.org/teamzac/fixed-width)
 [![Quality Score](https://img.shields.io/scrutinizer/g/teamzac/fixed-width.svg?style=flat-square)](https://scrutinizer-ci.com/g/teamzac/fixed-width)
 [![Total Downloads](https://img.shields.io/packagist/dt/teamzac/fixed-width.svg?style=flat-square)](https://packagist.org/packages/teamzac/fixed-width)
 
-This is where your description should go. Try and limit it to a paragraph or two, and maybe throw in a mention of what PSRs you support to avoid any confusion with users and contributors.
+Parsing fixed with files isn't much fun. This package provides a fluent, object-oriented way to define what your source file looks like. It then uses that definition to parse the file and return the results to you in a format that's convenient to use.
+
+## Features:
+
+### Value casting 
+Easily cast the raw value to a string, int, float, or bool value.
+
+### Value mapping
+Provide a key-value array that will map your source data to a more helpful destination data. For example, 'T' and 'F' can become ```true``` and ```false```, respectively. Convert coded data to the correct foreign key for some related database table. Whatever you need to do, really.
+
+### Transform callbacks
+If you need more fine-grained control over how the data is transformed from source, you can specify a callback function.
+
+### Filler and ignored fields
+If your source data has filler fields or fields you don't care about, you can easily account for them without muddying up your parsed results.
+
+### Nested Results
+Using dot notation, you can nest your parsed results.
 
 ## Installation
 
@@ -16,9 +33,13 @@ composer require teamzac/fixed-width
 ```
 
 ## Usage
+The ```FixedWidthParser``` handles parsing a given file path once you provide it with a LineDefinition class.
 
 ``` php
-// Usage description here
+$parsedLines = FixedWidthParser::make()
+	->using(/** LineDefinitionClass */)
+	->parse(/** filename */)
+	->all();
 ```
 
 ### Testing
