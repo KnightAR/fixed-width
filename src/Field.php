@@ -81,7 +81,8 @@ class Field
 	 */
 	public static function filler(...$length)
 	{
-		return static::make('filler', $length)->ignore();
+		$length = Arr::wrap($length);
+		return static::make('filler', array_sum($length))->ignore();
 	}
 
 	/**

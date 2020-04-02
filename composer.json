@@ -44,10 +44,10 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Teamzac\\FixedWidth\\FixedWidthServiceProvider"
+                "TeamZac\\FixedWidth\\FixedWidthServiceProvider"
             ],
             "aliases": {
-                "FixedWidth": "Teamzac\\FixedWidth\\FixedWidthFacade"
+                "FixedWidth": "TeamZac\\FixedWidth\\Facades\\FixedWidth"
             }
         }
     }

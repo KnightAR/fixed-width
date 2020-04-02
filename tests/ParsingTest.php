@@ -10,7 +10,9 @@ use TeamZac\FixedWidth\FixedWidthServiceProvider;
 use TeamZac\FixedWidth\LineDefinition;
 use TeamZac\FixedWidth\Tests\Fixtures\CastingLine;
 use TeamZac\FixedWidth\Tests\Fixtures\ExplodedLine;
+use TeamZac\FixedWidth\Tests\Fixtures\FillerLine;
 use TeamZac\FixedWidth\Tests\Fixtures\FullTestLine;
+use TeamZac\FixedWidth\Tests\Fixtures\IgnoreLine;
 use TeamZac\FixedWidth\Tests\Fixtures\SimpleLine;
 use TeamZac\FixedWidth\Tests\Fixtures\TransformedLine;
 use TeamZac\FixedWidth\Tests\Fixtures\ValueMappedLine;
@@ -75,6 +77,27 @@ class ParsingTest extends TestCase
         $rowText = 'lower';
         $line = new TransformedLine($rowText);
         $this->assertSame('LOWER', $line->get('upper'));
+    }
+    
+    /** @test */
+    public function it_allows_filler_fields()
+    {
+        $rowText = '     12345     ';
+
+        $line = new FillerLine($rowText);
+        $this->assertCount(1, $line->toArray());
+    }
+    
+    /** @test */
+    public function it_allows_ignored_fields()
+    {
+        $rowText = 'IGNOREKEEP';
+
+        $line = new IgnoreLine($rowText);
+        $this->assertCount(1, $line->toArray());
+        $this->assertSame([
+            'kept' => 'KEEP',
+        ], $line->toArray());
     }
 
     /** @test */
