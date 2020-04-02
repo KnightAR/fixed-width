@@ -37,9 +37,9 @@ The ```FixedWidthParser``` class handles parsing a given file path once you prov
 
 ``` php
 $lines = FixedWidthParser::make()
-	->using(/** LineDefinitionClass */)
-	->parse(/** filename */)
-	->all();
+  ->using(/** LineDefinitionClass */)
+  ->parse(/** filename */)
+  ->all();
 
 // $lines will be an array of TeamZac\FixedWidth\ParsedLine objects
 ```
@@ -50,11 +50,11 @@ If you have a larger file and prefer not to keep everything in memory, you can u
 use TeamZac\FixedWidth\ParsedLine;
 
 $parsedLines = FixedWidthParser::make()
-	->using(/** LineDefinitionClass */)
-	->parse(/** filename */)
-	->each(function(ParsedLine $line) {
-		// you'll get each line one at a time
-	});
+  ->using(/** LineDefinitionClass */)
+  ->parse(/** filename */)
+  ->each(function(ParsedLine $line) {
+    // you'll get each line one at a time
+  });
 ```
 
 The ```ParsedLine``` object contains the results from parsing a single line of your source file. You can access the values as properties on the object (via magic methods) or via the ```get()``` method, which is helpful if you have nested values. You can also call ```toArray()``` to return the raw values as an associative array.
@@ -67,14 +67,14 @@ use TeamZac\FixedWidth\LineDefinition;
 
 class MyCustomLineDefinition extends LineDefinition
 {
-	protected function fieldDefinitions()
-	{
-		return [
-			Field::make('id', 5),
-			Field::make('name', 20),
-			Field::make('email', 50),
-		];
-	}
+  protected function fieldDefinitions()
+  {
+    return [
+      Field::make('id', 5),
+      Field::make('name', 20),
+      Field::make('email', 50),
+    ];
+  }
 }
 ```
 
@@ -90,20 +90,20 @@ The ```$key``` can be a simple string for a flattened array, or you can use dot 
 
 ```php
 [
-	Field::make('name', 10),
-	Field::make('address.street', 20),
-	Field::make('address.city', 20),
-	Field::make('address.state', 10),
+  Field::make('name', 10),
+  Field::make('address.street', 20),
+  Field::make('address.city', 20),
+  Field::make('address.state', 10),
 ]
 
 // produces
 [
-	'name' => 'Jane Doe',
-	'address' => [
-		'street' => '100 Main Street',
-		'city' => 'Anytown',
-		'state' => 'Florida',
-	]
+  'name' => 'Jane Doe',
+  'address' => [
+    'street' => '100 Main Street',
+    'city' => 'Anytown',
+    'state' => 'Florida',
+  ]
 ]
 ```
 
@@ -147,8 +147,8 @@ Sometimes your source data may have coded values that you wish to replace with s
 ```php
 // source data of Y will become true, N will become false
 Field::make('is_confidential', 1)->map([
-	'Y' => true,
-	'N' => false,
+  'Y' => true,
+  'N' => false,
 ])
 ```
 
@@ -157,7 +157,7 @@ If you need to do some other transformation on the data before you store it, you
 ```php
 // convert the address field to all uppercase, because why not?
 Field::make('address', 20)->transformWith(function($value) {
-	return strtoupper($value);
+  return strtoupper($value);
 })
 ```
 
@@ -169,11 +169,11 @@ Field::make('favorite_colors', 20)->explode(',')
 
 // returns
 [
-	'favorite_colors' => [
-		'green', 
-		'blue',
-		'red'
-	]
+  'favorite_colors' => [
+    'green', 
+    'blue',
+    'red'
+  ]
 ]
 ```
 
