@@ -4,7 +4,7 @@
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/teamzac/fixed-width.svg?style=flat-square)](https://packagist.org/packages/teamzac/fixed-width)
 
-Parsing fixed with files isn't much fun. It often involves a lot of procedural code that is a pain to write and maintain. This package provides a fluent, object-oriented way to define what your source file looks like. It then uses that definition to parse the file and return the results to you in a format that's convenient to use.
+Parsing fixed-width files isn't much fun. It often involves a lot of procedural code that is a pain to write and maintain. This package provides a fluent, object-oriented way to define what your source file looks like. It then uses that definition to parse the file and return the results to you in a format that's convenient to use.
 
 ## Features:
 
