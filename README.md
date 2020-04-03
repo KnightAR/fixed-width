@@ -38,7 +38,7 @@ The ```FixedWidthParser``` class handles parsing a given file path once you prov
 
 ``` php
 $lines = FixedWidthParser::make()
-  ->using(/** LineDefinitionClass */)
+  ->using(/** LineDefinition class/object, or array of field definitions */)
   ->parse(/** filepath */)
   ->all();
 
