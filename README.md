@@ -52,7 +52,7 @@ use TeamZac\FixedWidth\ParsedLine;
 
 $parsedLines = FixedWidthParser::make()
   ->using(/** LineDefinition class/object, or array of field definitions */)
-  ->parse(/** filename */)
+  ->parse(/** filepath */)
   ->each(function(ParsedLine $line) {
     // you'll get each line one at a time
   });
