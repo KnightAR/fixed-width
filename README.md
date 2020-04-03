@@ -1,4 +1,5 @@
 
+
 # A lightweight package to make parsing fixed-width text files a bit easier
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/teamzac/fixed-width.svg?style=flat-square)](https://packagist.org/packages/teamzac/fixed-width)
@@ -38,7 +39,7 @@ The ```FixedWidthParser``` class handles parsing a given file path once you prov
 ``` php
 $lines = FixedWidthParser::make()
   ->using(/** LineDefinitionClass */)
-  ->parse(/** filename */)
+  ->parse(/** filepath */)
   ->all();
 
 // $lines will be an array of TeamZac\FixedWidth\ParsedLine objects
@@ -50,16 +51,18 @@ If you have a larger file and prefer not to keep everything in memory, you can u
 use TeamZac\FixedWidth\ParsedLine;
 
 $parsedLines = FixedWidthParser::make()
-  ->using(/** LineDefinitionClass */)
+  ->using(/** LineDefinition class/object, or array of field definitions */)
   ->parse(/** filename */)
   ->each(function(ParsedLine $line) {
     // you'll get each line one at a time
   });
 ```
 
-The ```ParsedLine``` object contains the results from parsing a single line of your source file. You can access the values as properties on the object (via magic methods) or via the ```get()``` method, which is helpful if you have nested values. You can also call ```toArray()``` to return the raw values as an associative array.
+The ```ParsedLine``` object contains the results from parsing a single line of your source file. See below for more information about the ```ParsedLine``` object.
 
-The ```FullWidthParser``` uses ```LineDefinition``` objects to know how to parse a given file. You can create your own definition objects by extending ```TeamZac\FixedWidth\LineDefinition``` and overriding the ```fieldDefinitions()``` method:
+### LineDefinition objects
+
+The ```FixedWidthParser``` uses ```LineDefinition``` objects to know how to parse a given file. You can create your own definition objects by extending ```TeamZac\FixedWidth\LineDefinition``` and overriding the ```fieldDefinitions()``` method:
 
 ``` php
 use TeamZac\FixedWidth\Field;
@@ -78,7 +81,27 @@ class MyCustomLineDefinition extends LineDefinition
 }
 ```
 
-The ```fieldDefinitions()``` method simply returns an array of ```TeamZac\FixedWidth\Field``` objects. These ```Field``` objects are how you define how your source files should be parsed. There are 3 options for creating a new ```Field```:
+The ```fieldDefinitions()``` method simply returns an array of ```TeamZac\FixedWidth\Field``` objects. These ```Field``` objects are how you define how your source files should be parsed. 
+
+### Anonymous Line Definitions
+
+If you don't care to create a dedicated ```LineDefinition``` subclass, you can simply pass the desired ```Field``` definitions to the ```using()``` method of the ```FixedWidthParser```. For example:
+
+```php
+$parsedLines = FixedWidthParser::make()
+  ->using([
+    Field::make('name', 10),
+    Field::make('email', 20),
+  ])
+  ->parse(/** filename */)
+  ->each(function(ParsedLine $line) {
+    // you'll get each line one at a time
+  });
+```
+
+### Fields
+
+There are 3 options for creating a new ```Field```:
 
 ```php
 // The $key is the key you'll use to access this field
@@ -113,7 +136,7 @@ If you have filler fields in your source data, you can easily account for them:
 Field::filler($length);
 ```
 
-Filler Fields will simply be ignored. If your source data has multiple filler fields consecutively, that's easy, too (unless you want to do the math yourself, which you're welcome to do).
+Fillers will simply be ignored. If your source data has multiple filler fields consecutively, that's easy, too (unless you want to do the math yourself, which you're welcome to do).
 ```php
 Field::filler(10, 10, 20);
 ```
@@ -124,32 +147,40 @@ Of course, you can use a filler field to ignore any content you don't care about
 Field::ignored('who cares about this field?', $length);
 ```
 
-Just like Filler Fields, Ignored fields will not be included in your parsed values.
+Just like Filler fields, Ignored fields will not be included in your parsed values. They can be useful as documentation, though.
 
 ### Fluent Field Options
 
-You can fluently apply a variety of options to the new Field object. For example, you can choose whether you want the value to be ```trim```med or not (by default, all values get trimmed):
+You can fluently apply a variety of options to the new ```Field``` object. For example, you can choose whether you want the value to be trimmed or not (by default, all values get trimmed):
 
 ```php
-Field::make('user_id', 10)->untrimmed()
+Field::make('user_id', 10)->untrimmed();
 ```
 
 You can cast the value from a string to something else:
 
 ```php
-Field::make('user_id', 10)->asInt()
-Field::make('latitude', 10)->asFloat()
-Field::make('is_active', 1)->asBool()
+Field::make('user_id', 10)->asInt();
+Field::make('latitude', 10)->asFloat();
+Field::make('is_active', 1)->asBool();
 ```
 
-Sometimes your source data may have coded values that you wish to replace with something more appropriate for your domain. 
+Convenient shorthands are provided among the static constructors to quickly set the casting.
 
 ```php
-// source data of Y will become true, N will become false
+Field::int('user_id', 10);
+Field::float('latitude', 10);
+Field::bool('is_active', 1);
+```
+
+Sometimes your source data may have coded values that you wish to replace with something more appropriate to your domain. 
+
+```php
+// source data of 'Y' will be `true`, 'N' will be `false`
 Field::make('is_confidential', 1)->map([
   'Y' => true,
   'N' => false,
-])
+]);
 ```
 
 If you need to do some other transformation on the data before you store it, you can provide a callback function:
@@ -158,14 +189,14 @@ If you need to do some other transformation on the data before you store it, you
 // convert the address field to all uppercase, because why not?
 Field::make('address', 20)->transformWith(function($value) {
   return strtoupper($value);
-})
+});
 ```
 
 It may not happen often, but we have come across delimited fields within a fixed-width data file. You could use the ```transformWith()``` method to split these, but we also have a convenient ```explode()``` method if you prefer:
 
 ```php
 // source: green,blue,red
-Field::make('favorite_colors', 20)->explode(',')
+Field::make('favorite_colors', 20)->explode(',');
 
 // returns
 [
@@ -180,7 +211,6 @@ Field::make('favorite_colors', 20)->explode(',')
 ## Todo
 
 - Allow casting to date with user-specified date format
-- Allow anonymous LineDefinitions, rather than requiring a dedicated class
 - Allow a callback for the ignore() function so you could dynamically choose whether to ignore certain fields? Not sure if that will be useful.
 
 ## Testing

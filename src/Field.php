@@ -70,6 +70,30 @@ class Field
 	}
 
 	/**
+	 * Quickly create an int field
+	 */
+	public static function int($key, $length)
+	{
+		return static::make($key, $length)->asInt();
+	}
+
+	/**
+	 * Quickly create a float field
+	 */
+	public static function float($key, $length)
+	{
+		return static::make($key, $length)->asFloat();
+	}
+
+	/**
+	 * Quickly create a bool field
+	 */
+	public static function bool($key, $length)
+	{
+		return static::make($key, $length)->asBool();
+	}
+
+	/**
 	 * You can use this to specify a filler field, which is either 
 	 * a true filler field, or perhaps just something you care so 
 	 * little about that you don't even bother to name it

@@ -101,6 +101,41 @@ class ParsingTest extends TestCase
     }
 
     /** @test */
+    public function it_allows_anonymous_field_definitions()
+    {
+        $values = FixedWidthParser::make()
+            ->parse(__DIR__.'/Fixtures/test-file.txt')
+            ->using([
+                Field::int('id', 5),
+                Field::make('name', 10),
+                Field::make('email', 20),
+                Field::make('active', 1)->map([
+                    'y' => true,
+                    'n' => false
+                ]),
+                Field::make('favorite_colors', 20)->explode('|'),
+                Field::float('salary', 9),
+                Field::make('address.uppercased', 20)->transformWith(function($value) {
+                    return strtoupper($value);
+                }),
+            ])
+            ->all();
+
+        $this->assertCount(2, $values);
+        tap($values[0], function($first) {
+            $this->assertSame(1, $first->id);
+            $this->assertSame('DOE, JOHN', $first->name);
+            $this->assertSame('JOHN@DOE.COM', $first->email);
+            $this->assertTrue($first->active);
+            $this->assertSame([
+                'blue', 'red'
+            ], $first->favorite_colors);
+            $this->assertSame(100000.0, $first->salary);
+            $this->assertSame('100 MAIN STREET', $first->get('address.uppercased'));
+        });
+    }
+
+    /** @test */
     public function it_parses_from_a_file()
     {
         $values = FixedWidthParser::make()

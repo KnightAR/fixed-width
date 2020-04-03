@@ -7,7 +7,7 @@ use TeamZac\FixedWidth\Exceptions\CouldNotParseException;
 class FixedWidthParser
 {
     /** @var string */
-    protected $rowClass;
+    protected $definition;
 
     /** @var string */
     protected $filepath;
@@ -23,12 +23,19 @@ class FixedWidthParser
     /**
      * Set the row parser to use 
      *
-     * @param 	string $rowClass
+     * @param 	string|object|array $definition
      * @return 	$this
      */
-    public function using($rowClass)
+    public function using($definition)
     {
-    	$this->rowClass = $rowClass;
+        if (is_string($definition)) {
+            $this->definition = resolve($definition);
+        } else if (is_object($definition)) {
+            $this->definition = $definition;
+        } else if (is_array($definition)) {
+            $this->definition = new AnonymousLineDefinition($definition);
+        }
+
     	return $this;
     }
 
@@ -74,14 +81,13 @@ class FixedWidthParser
             throw CouldNotParseException::noFile();
         }
 
-        if (is_null($this->rowClass)) {
+        if (is_null($this->definition)) {
             throw CouldNotParseException::noLineDefinition();
         }
 
     	$file = fopen($this->filepath, 'r');
-        $lineDefinition = new $this->rowClass();
     	while ($line = fgets($file)) {
-    		$row = $lineDefinition->parse($line);
+    		$row = $this->definition->parse($line);
 
     		$callback($row);
     	}
