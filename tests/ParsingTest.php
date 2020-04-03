@@ -2,7 +2,9 @@
 
 namespace TeamZac\FixedWidth\Tests;
 
+use Carbon\Carbon;
 use Orchestra\Testbench\TestCase;
+use TeamZac\FixedWidth\AnonymousLineDefinition;
 use TeamZac\FixedWidth\Exceptions\CouldNotParseException;
 use TeamZac\FixedWidth\Field;
 use TeamZac\FixedWidth\FixedWidthParser;
@@ -47,6 +49,23 @@ class ParsingTest extends TestCase
         $this->assertSame(2, $line->get('as_int'));
         $this->assertSame(3.0, $line->get('as_float'));
         $this->assertSame(true, $line->get('as_bool'));
+    }
+    
+    /** @test */
+    public function it_casts_with_custom_date_formats()
+    {
+        $rowText = '2000-01-0102/01/2000';
+
+        $line = (new AnonymousLineDefinition([
+            Field::make('begin', 10)->asDate('Y-m-d'),
+            Field::date('end', 10, 'm/d/Y'),
+        ]))->parse($rowText);
+
+        $this->assertInstanceOf(Carbon::class, $line->begin);
+        $this->assertSame('2000-01-01', $line->begin->format('Y-m-d'));
+
+        $this->assertInstanceOf(Carbon::class, $line->end);
+        $this->assertSame('2000-02-01', $line->end->format('Y-m-d'));
     }
     
     /** @test */

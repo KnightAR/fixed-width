@@ -163,7 +163,10 @@ You can cast the value from a string to something else:
 Field::make('user_id', 10)->asInt();
 Field::make('latitude', 10)->asFloat();
 Field::make('is_active', 1)->asBool();
+Field::make('birthday', 10)->asDate('Y-m-d');
 ```
+
+Dates will be cast to an instance of ```Carbon\Carbon```. 
 
 Convenient shorthands are provided among the static constructors to quickly set the casting.
 
@@ -171,6 +174,7 @@ Convenient shorthands are provided among the static constructors to quickly set 
 Field::int('user_id', 10);
 Field::float('latitude', 10);
 Field::bool('is_active', 1);
+Field::date('birthday', 10, 'Y-m-d');
 ```
 
 Sometimes your source data may have coded values that you wish to replace with something more appropriate to your domain. 
@@ -210,7 +214,6 @@ Field::make('favorite_colors', 20)->explode(',');
 
 ## Todo
 
-- Allow casting to date with user-specified date format
 - Allow a callback for the ignore() function so you could dynamically choose whether to ignore certain fields? Not sure if that will be useful.
 
 ## Testing

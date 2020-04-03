@@ -2,6 +2,7 @@
 
 namespace TeamZac\FixedWidth;
 
+use Carbon\Carbon;
 use Illuminate\Support\Arr;
 
 class Field
@@ -26,6 +27,13 @@ class Field
 	 * @var string
 	 */
 	protected $castAs = 'string';
+
+	/**
+	 * Format string for parsing as a date
+	 *
+	 * @var string
+	 */
+	protected $dateFormat = 'Y-m-d';
 
 	/**
 	 * Should the value parsed from this field be included or ignored?
@@ -91,6 +99,14 @@ class Field
 	public static function bool($key, $length)
 	{
 		return static::make($key, $length)->asBool();
+	}
+
+	/**
+	 * Quickly create a date field
+	 */
+	public static function date($key, $length, $format = 'Y-m-d')
+	{
+		return static::make($key, $length)->asDate($format);
 	}
 
 	/**
@@ -183,6 +199,27 @@ class Field
 	public function asBool()
 	{
 		return $this->as('bool');
+	}
+
+	/**
+	 * Cast this value as a date
+	 */
+	public function asDate($format = 'Y-m-d')
+	{
+		return $this->setDateFormat($format)
+			->as('date');
+	}
+
+	/**
+	 * Set the date format
+	 *
+	 * @param string $format
+	 * @return $this
+	 */
+	public function setDateFormat($format = 'Y-m-d')
+	{
+		$this->dateFormat = $format;
+		return $this;
 	}
 
 	/** 
@@ -290,6 +327,8 @@ class Field
 			return (float) $value;
 		} else if ($this->castAs == 'bool') {
 			return (bool) $value;
+		} else if ($this->castAs == 'date') {
+			return Carbon::createFromFormat($this->dateFormat, $value);
 		}
 
 		return $value;
