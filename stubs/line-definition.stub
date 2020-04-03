@@ -1,0 +1,21 @@
+<?php
+
+namespace DummyNamespace;
+
+use TeamZac\FixedWidth\Field;
+use TeamZac\FixedWidth\LineDefinition;
+
+class DummyClass extends LineDefinition
+{
+	/** 
+	 * Return an array of Field objects that defines how the string should be parsed
+	 *
+	 * @return Field[]
+	 */
+	protected function fieldDefinitions()
+	{
+		return [
+			// Field::make($key, $length),
+		];
+	}
+}
