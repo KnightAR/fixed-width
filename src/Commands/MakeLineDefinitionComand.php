@@ -1,6 +1,6 @@
 <?php
 
-namespace TeamZac\Workflow\Commands;
+namespace TeamZac\FixedWidth\Commands;
 
 use Illuminate\Console\GeneratorCommand;
 
