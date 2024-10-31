@@ -6,7 +6,7 @@ use TeamZac\FixedWidth\Exceptions\CouldNotParseException;
 
 class FixedWidthParser
 {
-    /** @var string */
+    /** @var string|\TeamZac\FixedWidth\LineDefinition */
     protected $definition;
 
     /** @var string */
@@ -21,7 +21,7 @@ class FixedWidthParser
     }
 
     /**
-     * Set the row parser to use 
+     * Set the row parser to use
      *
      * @param 	string|object|array $definition
      * @return 	$this
@@ -39,7 +39,7 @@ class FixedWidthParser
     	return $this;
     }
 
-    /** 
+    /**
      * Set the path of the file to parse
      *
      * @var string $filepath
@@ -69,13 +69,13 @@ class FixedWidthParser
         return $values;
     }
 
-    /** 
+    /**
      * Parse the file and return each record one at a time.
      * Definitely use this for larger files instead of all()
      *
      * @param 	Callable $callback
      */
-    public function each($callback) 
+    public function each($callback)
     {
         if (is_null($this->filepath)) {
             throw CouldNotParseException::noFile();

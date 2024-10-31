@@ -4,6 +4,7 @@ namespace TeamZac\FixedWidth\Tests;
 
 use Carbon\Carbon;
 use Orchestra\Testbench\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 use TeamZac\FixedWidth\AnonymousLineDefinition;
 use TeamZac\FixedWidth\Exceptions\CouldNotParseException;
 use TeamZac\FixedWidth\Field;
@@ -25,8 +26,8 @@ class ParsingTest extends TestCase
     {
         return [FixedWidthServiceProvider::class];
     }
-    
-    /** @test */
+
+    #[Test]
     public function it_splits_fixed_width_files_based_on_the_definition()
     {
         $rowText = '  A  B  C';
@@ -37,8 +38,8 @@ class ParsingTest extends TestCase
         $this->assertSame('B', $line->get('b'));
         $this->assertSame('  C', $line->get('c'));
     }
-    
-    /** @test */
+
+    #[Test]
     public function it_casts_the_raw_values()
     {
         $rowText = '  1  23.0  1';
@@ -50,8 +51,8 @@ class ParsingTest extends TestCase
         $this->assertSame(3.0, $line->get('as_float'));
         $this->assertSame(true, $line->get('as_bool'));
     }
-    
-    /** @test */
+
+    #[Test]
     public function it_casts_with_custom_date_formats()
     {
         $rowText = '2000-01-0102/01/2000';
@@ -67,8 +68,8 @@ class ParsingTest extends TestCase
         $this->assertInstanceOf(Carbon::class, $line->end);
         $this->assertSame('2000-02-01', $line->end->format('Y-m-d'));
     }
-    
-    /** @test */
+
+    #[Test]
     public function it_uses_a_value_map()
     {
         $rowText = 'Y';
@@ -80,7 +81,7 @@ class ParsingTest extends TestCase
         $this->assertSame(false, $line->get('mapped_value'));
     }
 
-    /** @test */
+    #[Test]
     public function it_can_explode_a_value()
     {
         $rowText = 'C12,C13,C20           ';
@@ -90,15 +91,15 @@ class ParsingTest extends TestCase
         ], $line->get('codes'));
     }
 
-    /** @test */
+    #[Test]
     public function it_can_transform_a_value()
     {
         $rowText = 'lower';
         $line = (new TransformedLine)->parse($rowText);
         $this->assertSame('LOWER', $line->get('upper'));
     }
-    
-    /** @test */
+
+    #[Test]
     public function it_allows_filler_fields()
     {
         $rowText = '     12345     ';
@@ -106,8 +107,8 @@ class ParsingTest extends TestCase
         $line = (new FillerLine)->parse($rowText);
         $this->assertCount(1, $line->toArray());
     }
-    
-    /** @test */
+
+    #[Test]
     public function it_allows_ignored_fields()
     {
         $rowText = 'IGNOREKEEP';
@@ -119,7 +120,7 @@ class ParsingTest extends TestCase
         ], $line->toArray());
     }
 
-    /** @test */
+    #[Test]
     public function it_allows_anonymous_field_definitions()
     {
         $values = FixedWidthParser::make()
@@ -154,7 +155,7 @@ class ParsingTest extends TestCase
         });
     }
 
-    /** @test */
+    #[Test]
     public function it_parses_from_a_file()
     {
         $values = FixedWidthParser::make()
@@ -176,7 +177,7 @@ class ParsingTest extends TestCase
         });
     }
 
-    /** @test */
+    #[Test]
     public function it_throws_an_exception_if_no_file_is_provided()
     {
         try {
@@ -192,7 +193,7 @@ class ParsingTest extends TestCase
         $this->fail('Expected an exception because no file was provided');
     }
 
-    /** @test */
+    #[Test]
     public function it_throws_an_exception_if_no_line_definition_is_provided()
     {
         try {
