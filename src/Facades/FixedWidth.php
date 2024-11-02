@@ -3,11 +3,12 @@
 namespace TeamZac\FixedWidth\Facades;
 
 use Illuminate\Support\Facades\Facade;
+use TeamZac\FixedWidth\FixedWidthParser;
 
 /**
  * @see \TeamZac\FixedWidth\FixedWidthParser
  */
-class FixedWidthFacade extends Facade
+class FixedWidth extends Facade
 {
     /**
      * Get the registered name of the component.
@@ -16,6 +17,6 @@ class FixedWidthFacade extends Facade
      */
     protected static function getFacadeAccessor()
     {
-        return 'fixed-width';
+        return FixedWidthParser::class;
     }
 }

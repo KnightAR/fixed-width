@@ -3,6 +3,7 @@
 namespace TeamZac\FixedWidth;
 
 use Illuminate\Support\ServiceProvider;
+use TeamZac\FixedWidth\Facades\FixedWidth;
 
 class FixedWidthServiceProvider extends ServiceProvider
 {
@@ -24,8 +25,6 @@ class FixedWidthServiceProvider extends ServiceProvider
     public function register()
     {
         // Register the main class to use with the facade
-        $this->app->singleton('fixed-width', function () {
-            return new FixedWidthParser;
-        });
+        $this->app->singleton('fixed-width', FixedWidth::class);
     }
 }
